@@ -10,7 +10,7 @@ import numpy as np
 import os
 
 
-def get_elmo_embeddings(sentences):
+def get_elmo_embeddings(sentences,max_tokens):
     #create a pretrained elmo model (requires internet connection)
     elmo = ElmoEmbedder(cuda_device=0)
     embeddings=[]
@@ -41,7 +41,7 @@ def load_glove_model(glove_file):
     print("Done.",len(model)," words loaded!")
     return model
 
-def get_glove_embeddings(glove_model,sentences):
+def get_glove_embeddings(glove_model,sentences,max_tokens):
     glove_embeddings=None
     for indx,sentence in enumerate(sentences):
         temp=[]
@@ -75,15 +75,15 @@ def fuse_embeddings (glove_embeddings,elmo_embeddings):
 
 
 #define max token length
-max_tokens=20
+max_tokens=3
 
 #input sentences
-sentences=["how are you doing"]
+sentences=["how are you"]
 
 #load glove model, download glove model from https://nlp.stanford.edu/projects/glove/ and place it in the project directory
 glove_model=load_glove_model(os.getcwd()+"\\glove.42B.300d.txt")
 
 #%%
-elmo_embeddings=get_elmo_embeddings(sentences)
-glove_embeddings=get_glove_embeddings(glove_model,sentences)
+elmo_embeddings=get_elmo_embeddings(sentences,max_tokens)
+glove_embeddings=get_glove_embeddings(glove_model,sentences,max_tokens)
 fused_embeddings=fuse_embeddings (glove_embeddings,elmo_embeddings)
